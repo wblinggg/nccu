@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>黃牛票專題小測驗</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #74ebd5, #ACB6E5);
+      padding: 20px;
+      line-height: 1.6;
+      color: #333;
+    }
+    .quiz-container {
+      background-color: #fff;
+      padding: 20px 30px;
+      margin: 50px auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 700px;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    .options {
+      margin-top: 20px;
+    }
+    .options label {
+      display: block;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+    button {
+      display: block;
+      margin: 30px auto 0;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    #result {
+      text-align: center;
+      font-size: 20px;
+      color: #333;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container" id="quiz">
+    <h1>黃牛票專題小測驗</h1>
+    <div id="question-container">
+      <h2 id="question">題目載入中...</h2>
+      <div class="options" id="options"></div>
+      <button id="submit">提交答案</button>
+    </div>
+    <div id="result" style="display: none;"></div>
+  </div>
+
+  <script>
+    const quizData = [
+      {
+        question: "1. 「黃牛」這個詞的起源是什麼？",
+        options: {
+          A: "因為黃牛喜歡擠在一起",
+          B: "上海票販子搶票場面混亂如黃牛群",
+          C: "黃牛是指黃色的牛",
+          D: "因為黃牛票是黃色的"
+        },
+        correct: "B"
+      },
+      {
+        question: "2. 根據報導，黃牛利用什麼方式大量購票？",
+        options: {
+          A: "人工排隊",
+          B: "電話訂票",
+          C: "使用程式搶票",
+          D: "郵寄訂票"
+        },
+        correct: "C"
+      },
+      {
+        question: "3. 《文創法》修法後，對於黃牛行為的處罰是？",
+        options: {
+          A: "沒有處罰",
+          B: "罰鍰票面價的10倍至50倍",
+          C: "罰鍰100元",
+          D: "罰鍰票面價的2倍"
+        },
+        correct: "B"
+      },
+      {
+        question: "4. 哪種制度有助於減少黃牛票的出現？",
+        options: {
+          A: "現場購票",
+          B: "實名制與抽選制",
+          C: "現金交易",
+          D: "網路轉售平台"
+        },
+        correct: "B"
+      },
+      {
+        question: "5. 根據調查，多少比例的民眾在經濟許可下願意購買黃牛票？",
+        options: {
+          A: "約10%",
+          B: "約25%",
+          C: "約47%",
+          D: "約75%"
+        },
+        correct: "C"
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    const questionEl = document.getElementById('question');
+    const optionsEl = document.getElementById('options');
+    const submitBtn = document.getElementById('submit');
+    const resultEl = document.getElementById('result');
+    const questionContainer = document.getElementById('question-container');
+
+    function loadQuestion() {
+      const currentQuiz = quizData[currentQuestion];
+      questionEl.textContent = currentQuiz.question;
+      optionsEl.innerHTML = '';
+      for (const [key, value] of Object.entries(currentQuiz.options)) {
+        const label = document.createElement('label');
+        label.innerHTML = `
+          <input type="radio" name="answer" value="${key}">
+          ${key}. ${value}
+        `;
+        optionsEl.appendChild(label);
+      }
+    }
+
+    function getSelected() {
+      const answers = document.getElementsByName('answer');
+      for (const answer of answers) {
+        if (answer.checked) {
+          return answer.value;
+        }
+      }
+      return null;
+    }
+
+    submitBtn.addEventListener('click', () => {
+      const answer = getSelected();
+      if (answer) {
+        if (answer === quizData[currentQuestion].correct) {
+          score++;
+        }
+        currentQuestion++;
+        if (currentQuestion < quizData.length) {
+          loadQuestion();
+        } else {
+          questionContainer.style.display = 'none';
+          resultEl.style.display = 'block';
+          resultEl.textContent = `您答對了 ${score} 題，共 ${quizData.length} 題。`;
+        }
+      } else {
+        alert('請選擇一個答案！');
+      }
+    });
+
+    loadQuestion();
+  </script>
+</body>
+</html>
